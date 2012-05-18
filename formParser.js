@@ -22,66 +22,53 @@ function init() {
 }
 
 function showTask(task) {
-  var taskContainer = $('ul#tasklist');
+  var taskContainer = $('div#tasklist.controls');
   var myTask = getStoreArray(task);
 
   if (myTask[0].status) {
     taskContainer.append(
-        $(document.createElement("li")).attr({
+        $(document.createElement("label")).attr({
+          type:   'radio',
+          id:     'removeme',
+          class:  'radio task-done'
+        })
+        .text(task)
+        .append(
+        $(document.createElement("input")).attr({
+          type:   'radio',
+          name:   'optionName',
+          value:  'val1',
+          id:     'task',
+        })
+        .change(function() {
+                // Details Anzeigen / Verstecken
+                hideTaskDetails();
+                var c = this.checked ? showTaskDetails(task) : hideTaskDetails(task);
+              })
+          ));
+  } else {
+    taskContainer.append(
+        $(document.createElement("label")).attr({
+          type:   'radio',
+          id:     'removeme',
+          class:  'radio'
+        })
+        .text(task)
+        .append(
+        $(document.createElement("input")).attr({
+          type:   'radio',
+          name:   'optionName',
+          value:  'val1',
           id:     'task',
           class:  'task-done'
         })
-        .append(
-          $(document.createElement("div")).attr({
-            class:  'controls',
-          })
-          .append(
-            $(document.createElement("label")).attr({
-              class:  'checkbox',
-            })
-            .text(task)
-            .append(
-              $(document.createElement("input")).attr({
-                value:  task,
-                type:   'checkbox',
-              })
-              .change(function() {
+        .text(task)
+        .change(function() {
                 // Details Anzeigen / Verstecken
+                hideTaskDetails();
                 var c = this.checked ? showTaskDetails(task) : hideTaskDetails(task);
               })
-              )
-            )
-          )
-          );
-  } else {
-    taskContainer.append(
-        $(document.createElement("li")).attr({
-          id:   'task'
-        })
-        .append(
-          $(document.createElement("div")).attr({
-            class:  'controls'
-          })
-          .append(
-            $(document.createElement("label")).attr({
-              class:  'checkbox'
-            })
-            .text(task)
-            .append(
-              $(document.createElement("input")).attr({
-                value:  task,
-                type:   'checkbox'
-              })
-              .change(function() {
-                // Details Anzeigen / Verstecken
-                hideTaskDetails(task);
-                var c = this.checked ? showTaskDetails(task) : hideTaskDetails(task);
-              })
-              )
-            )
-          )
-          );
-
+          ));
   }
 
 }
@@ -139,5 +126,5 @@ function hideTaskDetails() {
 }
 
 function removeTask() {
-  $("li#task").remove();
+  $("label#removeme").remove();
 }
