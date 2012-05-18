@@ -25,14 +25,20 @@ function showTask(task) {
   var taskContainer = $('div#tasklist.controls');
   var myTask = getStoreArray(task);
   var id = task.split(' ').join('');
+
   if(id.length > 15) {
     id = id.substring(0,14);
   }
+
   taskContainer.append(
-      $(document.createElement("label")).attr({
-        type:   'radio',
-        id:     id,
-        class:  'radio'
+      $(document.createElement("div")).attr({
+        id:   'removeme'
+      })
+      .append(
+        $(document.createElement("label")).attr({
+          type:   'radio',
+          id:     id,
+          class:  'radio'
       })
       .text(task)
       .append(
@@ -44,10 +50,11 @@ function showTask(task) {
         .text(task)
         .change(function() {
           // Details Anzeigen / Verstecken
-          hideTaskDetails();
+          hideTaskDetails(task);
           var c = this.checked ? showTaskDetails(task) : hideTaskDetails(task);
         })
-      ));
+      ))
+        );
 
   if (myTask[0].status) {
     $("#" + id).addClass('task-done');
@@ -89,8 +96,6 @@ function showTaskDetails(task) {
       .click(function(event) {
         setStatus(task, true);
         removeTask();
-        loadTasklist();
-
       })
       );
 
@@ -102,7 +107,6 @@ function showTaskDetails(task) {
       .click(function(event) {
         delTask(task);
         removeTask();
-        loadTasklist();
         hideTaskDetails();
       })
       );
@@ -115,4 +119,5 @@ function hideTaskDetails() {
 
 function removeTask() {
   $("div#removeme").remove();
+  loadTasklist();
 }
