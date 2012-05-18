@@ -3,15 +3,15 @@ $(function() {
     // validate and process form here  
     //
 
-    var taskname = $("#formTask").val();  
-    var prio = $("#formPrio").val();  
-    var date = $("#datepicker").val();  
-    var tag = $("#formTag").val();
+    var taskname  = $("#formTask").val();  
+    var prio      = $("#formPrio").val();  
+    var date      = $("#datepicker").val();  
+    var tag       = $("#formTag").val();
+    var status    = false;
 
     if (taskname) {
+      save(taskname, prio, date, tag, status)
       showTask(taskname);
-
-      save(taskname, prio, date, tag)
     }
     return false; 
   });  
@@ -23,32 +23,67 @@ function init() {
 
 function showTask(task) {
   var taskContainer = $('ul#tasklist');
-  taskContainer.append(
-      $(document.createElement("li")).attr({
-        id:   'task'
-      })
-      .append(
-        $(document.createElement("div")).attr({
-          class:  'controls'
+  var myTask = getStoreArray(task);
+
+  if (myTask[0].status) {
+    taskContainer.append(
+        $(document.createElement("li")).attr({
+          id:     'task',
+          class:  'task-done'
         })
         .append(
-          $(document.createElement("label")).attr({
-            class:  'checkbox'
+          $(document.createElement("div")).attr({
+            class:  'controls',
           })
-          .text(task)
           .append(
-            $(document.createElement("input")).attr({
-              value:  task,
-              type:   'checkbox'
+            $(document.createElement("label")).attr({
+              class:  'checkbox',
             })
-            .change(function() {
-              // Details Anzeigen / Verstecken
-              var c = this.checked ? showTaskDetails(task) : hideTaskDetails(task);
-            })
+            .text(task)
+            .append(
+              $(document.createElement("input")).attr({
+                value:  task,
+                type:   'checkbox',
+              })
+              .change(function() {
+                // Details Anzeigen / Verstecken
+                var c = this.checked ? showTaskDetails(task) : hideTaskDetails(task);
+              })
+              )
+            )
           )
-        )
-      )
-  );
+          );
+  } else {
+    taskContainer.append(
+        $(document.createElement("li")).attr({
+          id:   'task'
+        })
+        .append(
+          $(document.createElement("div")).attr({
+            class:  'controls'
+          })
+          .append(
+            $(document.createElement("label")).attr({
+              class:  'checkbox'
+            })
+            .text(task)
+            .append(
+              $(document.createElement("input")).attr({
+                value:  task,
+                type:   'checkbox'
+              })
+              .change(function() {
+                // Details Anzeigen / Verstecken
+                hideTaskDetails(task);
+                var c = this.checked ? showTaskDetails(task) : hideTaskDetails(task);
+              })
+              )
+            )
+          )
+          );
+
+  }
+
 }
 
 function showTaskDetails(task) {
@@ -77,7 +112,10 @@ function showTaskDetails(task) {
         href:   '#',
       }).text("Erledigt")
     .click(function(event) {
-      alert("Erledigt");
+      setStatus(task, true);
+      removeTask();
+      loadTasklist();
+
       })
     );
 
