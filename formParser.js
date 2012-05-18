@@ -9,7 +9,7 @@ $(function() {
     var tag = $("#formTag").val();
 
     if (taskname) {
-      addTask(taskname);
+      showTask(taskname);
 
       save(taskname, prio, date, tag)
     }
@@ -21,10 +21,12 @@ function init() {
   loadTasklist();
 }
 
-function addTask(task) {
+function showTask(task) {
   var taskContainer = $('ul#tasklist');
   taskContainer.append(
-      $(document.createElement("li"))
+      $(document.createElement("li")).attr({
+        id:   'task'
+      })
       .append(
         $(document.createElement("div")).attr({
           class:  'controls'
@@ -86,18 +88,18 @@ function showTaskDetails(task) {
       }).text("Löschen")
       .click(function(event) {
         delTask(task);
-        removeTaskliste();
+        removeTask();
         loadTasklist();
-
+        hideTaskDetails();
       })
     );
   taskDetailsContainer2.append('</div>');
 }
 
-function hideTaskDetails(task) {
+function hideTaskDetails() {
   $("div#taskdetails2").remove();
 }
 
-function removeTaskliste() {
-  $("ul#tasklist").remove();
+function removeTask() {
+  $("li#task").remove();
 }
