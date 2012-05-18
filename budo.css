@@ -1,3 +1,9 @@
 .task-done {
   text-decoration:  line-through;
 }
+.task-phigh {
+  color:  #A2122F;
+}
+.task-plow {
+  color:  #327CCB;
+}

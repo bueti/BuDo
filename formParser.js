@@ -11,7 +11,7 @@ $(function() {
 
     if (taskname) {
       save(taskname, prio, date, tag, status)
-      showTask(taskname);
+    showTask(taskname);
     }
     return false; 
   });  
@@ -24,51 +24,39 @@ function init() {
 function showTask(task) {
   var taskContainer = $('div#tasklist.controls');
   var myTask = getStoreArray(task);
+  var id = task.split(' ').join('');
+  if(id.length > 15) {
+    id = id.substring(0,14);
+  }
+  taskContainer.append(
+      $(document.createElement("label")).attr({
+        type:   'radio',
+        id:     id,
+        class:  'radio'
+      })
+      .text(task)
+      .append(
+        $(document.createElement("input")).attr({
+          type:   'radio',
+          id:     'task',
+          name:   'tasks',
+        })
+        .text(task)
+        .change(function() {
+          // Details Anzeigen / Verstecken
+          hideTaskDetails();
+          var c = this.checked ? showTaskDetails(task) : hideTaskDetails(task);
+        })
+      ));
 
   if (myTask[0].status) {
-    taskContainer.append(
-        $(document.createElement("label")).attr({
-          type:   'radio',
-          id:     'removeme',
-          class:  'radio task-done'
-        })
-        .text(task)
-        .append(
-        $(document.createElement("input")).attr({
-          type:   'radio',
-          name:   'optionName',
-          value:  'val1',
-          id:     'task',
-        })
-        .change(function() {
-                // Details Anzeigen / Verstecken
-                hideTaskDetails();
-                var c = this.checked ? showTaskDetails(task) : hideTaskDetails(task);
-              })
-          ));
-  } else {
-    taskContainer.append(
-        $(document.createElement("label")).attr({
-          type:   'radio',
-          id:     'removeme',
-          class:  'radio'
-        })
-        .text(task)
-        .append(
-        $(document.createElement("input")).attr({
-          type:   'radio',
-          name:   'optionName',
-          value:  'val1',
-          id:     'task',
-          class:  'task-done'
-        })
-        .text(task)
-        .change(function() {
-                // Details Anzeigen / Verstecken
-                hideTaskDetails();
-                var c = this.checked ? showTaskDetails(task) : hideTaskDetails(task);
-              })
-          ));
+    $("#" + id).addClass('task-done');
+  }
+  if (myTask[0].prio == 'Hoch') {
+    $("#" + id).addClass('task-phigh');
+  } 
+  if (myTask[0].prio == 'Niedrig') {
+    $("#" + id).addClass('task-plow');
   }
 
 }
@@ -83,12 +71,12 @@ function showTaskDetails(task) {
   for (var index in taskdetail) {
     // Ausgabe der Taskdetails
     $.each(taskdetail[index], function(key, value) {
-        taskDetailsContainer2.append(
-          $(document.createElement("li"))
-          .append(
-            key + ": " + value
-            )
+      taskDetailsContainer2.append(
+        $(document.createElement("li"))
+        .append(
+          key + ": " + value
           )
+        )
     }
     );
   }
@@ -98,13 +86,13 @@ function showTaskDetails(task) {
         class:  'btn btn-success span2',
         href:   '#',
       }).text("Erledigt")
-    .click(function(event) {
-      setStatus(task, true);
-      removeTask();
-      loadTasklist();
+      .click(function(event) {
+        setStatus(task, true);
+        removeTask();
+        loadTasklist();
 
       })
-    );
+      );
 
   taskDetailsContainer2.append(
       $(document.createElement("button")).attr({
@@ -117,7 +105,7 @@ function showTaskDetails(task) {
         loadTasklist();
         hideTaskDetails();
       })
-    );
+      );
   taskDetailsContainer2.append('</div>');
 }
 
@@ -126,5 +114,5 @@ function hideTaskDetails() {
 }
 
 function removeTask() {
-  $("label#removeme").remove();
+  $("div#removeme").remove();
 }
