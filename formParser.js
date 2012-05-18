@@ -89,6 +89,10 @@ function showTaskDetails(task) {
   }
 
   taskDetailsContainer2.append(
+      $(document.createElement("p"))
+      );
+
+  taskDetailsContainer2.append(
       $(document.createElement("button")).attr({
         class:  'btn btn-success span2',
         href:   '#',
@@ -96,6 +100,16 @@ function showTaskDetails(task) {
       .click(function(event) {
         setStatus(task, true);
         removeTask();
+      })
+      );
+
+  taskDetailsContainer2.append(
+      $(document.createElement("button")).attr({
+        class:  'btn span2',
+        href:   '#',
+      }).text("Bearbeiten")
+      .click(function(event) {
+        editTask(task);
       })
       );
 
@@ -110,6 +124,7 @@ function showTaskDetails(task) {
         hideTaskDetails();
       })
       );
+
   taskDetailsContainer2.append('</div>');
 }
 
