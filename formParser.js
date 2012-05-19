@@ -47,7 +47,6 @@ function showTask(task) {
           id:     'task',
           name:   'tasks',
         })
-        .text(task)
         .change(function() {
           // Details Anzeigen / Verstecken
           hideTaskDetails(task);
