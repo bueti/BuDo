@@ -67,6 +67,14 @@ function showTask(task) {
 
 }
 
+function showKey(container, name, value) {
+  container.append(
+      $(document.createElement("li"))
+      .append(
+        name + ": " + value
+        )
+      )
+}
 function showTaskDetails(task) {
   var taskDetailsContainer = $('div#taskdetails');
   var taskdetail = getStoreArray(task);
@@ -77,14 +85,14 @@ function showTaskDetails(task) {
   for (var index in taskdetail) {
     // Ausgabe der Taskdetails
     $.each(taskdetail[index], function(key, value) {
-      taskDetailsContainer2.append(
-        $(document.createElement("li"))
-        .append(
-          key + ": " + value
-          )
-        )
-    }
-    );
+      if(key == 'prio') {
+        showKey(taskDetailsContainer2, 'Priorität', value);
+      } else if (key == 'date') {
+        showKey(taskDetailsContainer2, 'Datum', value);
+      } else if (key == 'tag') {
+        showKey(taskDetailsContainer2, '#Tag', value);
+      }
+    });
   }
 
   taskDetailsContainer2.append(
