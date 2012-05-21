@@ -13,7 +13,6 @@ $(function() {
       save(taskname, prio, date, tag, status)
     showTask(taskname);
     }
-    return false; 
   });  
 });  
 
@@ -25,6 +24,7 @@ function showTask(task) {
   var taskContainer = $('div#tasklist.controls');
   var myTask = getStoreArray(task);
   var id = task.split(' ').join('');
+  var test = false;
 
   if(id.length > 15) {
     id = id.substring(0,14);
@@ -35,24 +35,24 @@ function showTask(task) {
         id:   'removeme'
       })
       .append(
-        $(document.createElement("label")).attr({
-          type:   'radio',
+        $(document.createElement("button")).attr({
+          type:   'text',
+          class:  'btn btn-task',
           id:     id,
-          class:  'radio'
-      })
-      .text(task)
-      .append(
-        $(document.createElement("input")).attr({
-          type:   'radio',
-          id:     'task',
-          name:   'tasks',
-        })
-        .change(function() {
+        }).text(task)
+        .click(function() {
           // Details Anzeigen / Verstecken
           hideTaskDetails(task);
-          var c = this.checked ? showTaskDetails(task) : hideTaskDetails(task);
+          //var c = this.checked ? showTaskDetails(task) : hideTaskDetails(task);
+          if(!test) {
+            showTaskDetails(task);
+            test = true;
+          } else {
+            console.log(test);
+            test = false;
+          }
         })
-      ))
+      )
         );
 
   if (myTask[0].status) {

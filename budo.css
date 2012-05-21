@@ -1,9 +1,22 @@
 .task-done {
   text-decoration:  line-through;
 }
+
+.btn-task {
+  text-align: left;
+  width: 100%;
+  border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+
+}
+
 .task-phigh {
   color:  #A2122F;
+  width: 100%;
 }
+
 .task-plow {
   color:  #327CCB;
+  width: 100%;
 }
