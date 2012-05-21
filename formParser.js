@@ -75,6 +75,7 @@ function showKey(container, name, value) {
         )
       )
 }
+
 function showTaskDetails(task) {
   var taskDetailsContainer = $('div#taskdetails');
   var taskdetail = getStoreArray(task);
