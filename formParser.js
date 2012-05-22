@@ -81,10 +81,13 @@ function showTaskDetails(task) {
   var taskdetail = getStoreArray(task);
 
   $("#taskdetails").append('<div id="taskdetails2">');
+
   var taskDetailsContainer2 = $('div#taskdetails2');
 
+  // Task Name Anzeigen
+  showKey(taskDetailsContainer2, 'Name', task);
+  // Ausgabe der Taskdetails
   for (var index in taskdetail) {
-    // Ausgabe der Taskdetails
     $.each(taskdetail[index], function(key, value) {
       if(key == 'prio') {
         showKey(taskDetailsContainer2, 'Priorität', value);
@@ -99,21 +102,26 @@ function showTaskDetails(task) {
   taskDetailsContainer2.append(
       $(document.createElement("p"))
       );
-
+  
+  // Erledigt Button nur anzeigen falls der Task noch nicht erledigt ist
+  if(taskdetail[0].status == false) {
   taskDetailsContainer2.append(
       $(document.createElement("button")).attr({
-        class:  'btn btn-success span2',
+        class:  'btn btn-success',
         href:   '#',
       }).text("Erledigt")
       .click(function(event) {
         setStatus(task, true);
         removeTask();
+        hideTaskDetails(task);
+        showTaskDetails(task);
       })
       );
+  }
 
   taskDetailsContainer2.append(
       $(document.createElement("button")).attr({
-        class:  'btn span2',
+        class:  'btn',
         href:   '#',
       }).text("Bearbeiten")
       .click(function(event) {
@@ -123,7 +131,7 @@ function showTaskDetails(task) {
 
   taskDetailsContainer2.append(
       $(document.createElement("button")).attr({
-        class:  'btn btn-danger span2',
+        class:  'btn btn-danger',
         href:   '#',
       }).text("Löschen")
       .click(function(event) {
