@@ -48,7 +48,6 @@ function showTask(task) {
             showTaskDetails(task);
             test = true;
           } else {
-            console.log(test);
             test = false;
           }
         })
@@ -69,32 +68,53 @@ function showTask(task) {
 
 function showKey(container, name, value) {
   container.append(
-      $(document.createElement("li"))
-      .append(
-        name + ": " + value
-        )
-      )
+          //    $(document.createElement("fieldset")).append(
+          //$(document.createElement("div")).attr({
+          //  class:  'control-group'
+          //}).append(
+            $(document.createElement("label")).attr({
+              class:  'control-label'
+            }).text(name).add(
+              $(document.createElement("div")).attr({
+                class:  'controls'
+              })
+              .append(
+                $(document.createElement("span")).attr({
+                  class:  'input-xlarge uneditable-input'
+                }).text(value)
+                )
+              ))
+          //))
 }
 
 function showTaskDetails(task) {
-  var taskDetailsContainer = $('div#taskdetails');
+  var taskDetailsContainer = $('#taskdetails');
   var taskdetail = getStoreArray(task);
 
   $("#taskdetails").append('<div id="taskdetails2">');
 
-  var taskDetailsContainer2 = $('div#taskdetails2');
+  
+  $("#taskdetails2").append('<form class="form-horizontal" id="form-details">');
+  $("#taskdetails2").append('<fieldset>');
+  $("#taskdetails2").append('<div class="control-group">');
+  //    $(document.createElement("form")).attr({
+  //      class:  'form-horizontal'
+  //    })
+  //  );
+
+  var taskDetailsContainer2 = $('form#form-details');
 
   // Task Name Anzeigen
-  showKey(taskDetailsContainer2, 'Name', task);
+  showKey(taskDetailsContainer2, 'Name:', task);
   // Ausgabe der Taskdetails
   for (var index in taskdetail) {
     $.each(taskdetail[index], function(key, value) {
       if(key == 'prio') {
-        showKey(taskDetailsContainer2, 'Priorität', value);
+        showKey(taskDetailsContainer2, 'Priorität:', value);
       } else if (key == 'date') {
-        showKey(taskDetailsContainer2, 'Datum', value);
+        showKey(taskDetailsContainer2, 'Datum:', value);
       } else if (key == 'tag') {
-        showKey(taskDetailsContainer2, '#Tag', value);
+        showKey(taskDetailsContainer2, '#Tag:', value);
       }
     });
   }
@@ -141,6 +161,9 @@ function showTaskDetails(task) {
       })
       );
 
+  taskDetailsContainer2.append('</div>');
+  taskDetailsContainer2.append('</fieldset>');
+  taskDetailsContainer2.append('</form>');
   taskDetailsContainer2.append('</div>');
 }
 
