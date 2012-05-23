@@ -48,6 +48,7 @@ function showTask(task) {
             showTaskDetails(task);
             test = true;
           } else {
+            showTaskDetails(task);
             test = false;
           }
         })
