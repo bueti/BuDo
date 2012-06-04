@@ -11,26 +11,22 @@ $(function() {
 
     if (taskname) {
       save(taskname, prio, date, tag, status)
-    showTask(taskname);
+      showTasks();
     }
   });  
 });  
 
 function init() {
-  loadTasklist();
+  showTasks();
 }
 
-function showTask(task) {
+function showTasks() {
   var taskContainer = $('div#tasklist.controls');
-  var myTask = getStoreArray(task);
-  var id = task.split(' ').join('');
-  var test = false;
+  var myTasks = getStoreArray('tasklist');
+  var visible = false;
 
-  if(id.length > 15) {
-    id = id.substring(0,14);
-  }
-
-  taskContainer.append(
+  for (var id in myTasks) {
+    taskContainer.append(
       $(document.createElement("div")).attr({
         id:   'removeme'
       })
@@ -39,32 +35,33 @@ function showTask(task) {
           type:   'text',
           class:  'btn btn-task',
           id:     id,
-        }).text(task)
+        }).text(myTasks[id].task)
         .click(function() {
+          taskButtonId = this.id;
           // Details Anzeigen / Verstecken
-          hideTaskDetails(task);
+          hideTaskDetails();
           //var c = this.checked ? showTaskDetails(task) : hideTaskDetails(task);
-          if(!test) {
-            showTaskDetails(task);
-            test = true;
+          if(!visible) {
+            showTaskDetails(taskButtonId);
+            visible = true;
           } else {
-            showTaskDetails(task);
-            test = false;
+            showTaskDetails(taskButtonId);
+            visible = false;
           }
         })
       )
-        );
+    );
 
-  if (myTask[0].status) {
-    $("#" + id).addClass('task-done');
+    if (myTasks[id].status) {
+      $("#" + id).addClass('task-done');
+    }
+    if (myTasks[id].prio == 'Hoch') {
+      $("#" + id).addClass('task-phigh');
+    } 
+    if (myTasks[id].prio == 'Niedrig') {
+      $("#" + id).addClass('task-plow');
+    }
   }
-  if (myTask[0].prio == 'Hoch') {
-    $("#" + id).addClass('task-phigh');
-  } 
-  if (myTask[0].prio == 'Niedrig') {
-    $("#" + id).addClass('task-plow');
-  }
-
 }
 
 function showKey(container, name, value) {
@@ -88,9 +85,9 @@ function showKey(container, name, value) {
           //))
 }
 
-function showTaskDetails(task) {
+function showTaskDetails(id) {
   var taskDetailsContainer = $('#taskdetails');
-  var taskdetail = getStoreArray(task);
+  var taskdetail = getStoreArray('tasklist');
 
   $("#taskdetails").append('<div id="taskdetails2">');
 
@@ -106,11 +103,13 @@ function showTaskDetails(task) {
   var taskDetailsContainer2 = $('form#form-details');
 
   // Task Name Anzeigen
-  showKey(taskDetailsContainer2, 'Name:', task);
+  //showKey(taskDetailsContainer2, 'Name:', task);
   // Ausgabe der Taskdetails
-  for (var index in taskdetail) {
-    $.each(taskdetail[index], function(key, value) {
-      if(key == 'prio') {
+  //for (var index in taskdetail) {
+    $.each(taskdetail[id], function(key, value) {
+      if (key == 'task') {
+        showKey(taskDetailsContainer2, 'Task:', value);
+      } else if(key == 'prio') {
         showKey(taskDetailsContainer2, 'Priorität:', value);
       } else if (key == 'date') {
         showKey(taskDetailsContainer2, 'Datum:', value);
@@ -118,24 +117,24 @@ function showTaskDetails(task) {
         showKey(taskDetailsContainer2, '#Tag:', value);
       }
     });
-  }
+  //}
 
   taskDetailsContainer2.append(
       $(document.createElement("p"))
       );
   
   // Erledigt Button nur anzeigen falls der Task noch nicht erledigt ist
-  if(taskdetail[0].status == false) {
+  if(taskdetail[id].status == false) {
   taskDetailsContainer2.append(
       $(document.createElement("button")).attr({
         class:  'btn btn-success',
         href:   '#',
       }).text("Erledigt")
       .click(function(event) {
-        setStatus(task, true);
+        setStatus(id, true);
         removeTask();
-        hideTaskDetails(task);
-        showTaskDetails(task);
+        hideTaskDetails(id);
+        showTaskDetails(id);
       })
       );
   }
@@ -146,7 +145,7 @@ function showTaskDetails(task) {
         href:   '#',
       }).text("Bearbeiten")
       .click(function(event) {
-        editTask(task);
+        editTask(id);
       })
       );
 
@@ -156,7 +155,7 @@ function showTaskDetails(task) {
         href:   '#',
       }).text("Löschen")
       .click(function(event) {
-        delTask(task);
+        delTask(id);
         removeTask();
         hideTaskDetails();
       })
@@ -174,5 +173,5 @@ function hideTaskDetails() {
 
 function removeTask() {
   $("div#removeme").remove();
-  loadTasklist();
+  showTasks();
 }
