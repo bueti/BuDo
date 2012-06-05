@@ -90,13 +90,13 @@ function showTaskDetails(id) {
   // Ausgabe der Taskdetails
   $.each(taskdetail[id], function(key, value) {
     if (key == 'task') {
-      showKey('Task:', value);
+      showKey(' Task:', value);
     } else if(key == 'prio') {
-      showKey('Priorität:', value);
+      showKey(' Priorität:', value);
     } else if (key == 'date') {
-      showKey('Datum:', value);
+      showKey(' Datum:', value);
     } else if (key == 'tag') {
-      showKey('#Tag:', value);
+      showKey(' #Tag:', value);
     }
   });
 
@@ -108,36 +108,68 @@ function showTaskDetails(id) {
   
   // Erledigt Button nur anzeigen falls der Task noch nicht erledigt ist
   if(taskdetail[id].status == false) {
-  taskDetailsButtonContainer.append(
+    taskDetailsButtonContainer.append(
       $(document.createElement("button")).attr({
         class:  'btn btn-success',
+        id:     'done',
         href:   '#',
-      }).text("Erledigt")
+      }).text(" Done")
       .click(function(event) {
         setStatus(id, true);
-        removeTask();
         hideTaskDetails(id);
         showTaskDetails(id);
       })
-      );
+    );
+
+    jQuery('<i/>', {
+      class:  'icon-check icon-white',
+    }).prependTo('#done');
+
+  } else {
+    taskDetailsButtonContainer.append(
+      $(document.createElement("button")).attr({
+        class:  'btn btn-inverse',
+        id:     'done',
+      }).text(" Reopen")
+      .click(function(event) {
+        setStatus(id, false);
+        hideTaskDetails(id);
+        removeTask(id);
+        showTaskDetails(id);
+      })
+    );
+
+    jQuery('<i/>', {
+      class:  'icon-check icon-white',
+    }).prependTo('#done'); 
   }
 
-  taskDetailsButtonContainer.append(
+  if(taskdetail[id].status == false) {
+    taskDetailsButtonContainer.append(
       $(document.createElement("button")).attr({
         class:  'btn',
         href:   '#',
-      }).text("Bearbeiten")
-      .click(function(event) {
+      }).text(" Edit")
+      .prepend(
+        $(document.createElement("i")).attr({
+          class:  'icon-edit'
+        })
+      ).click(function(event) {
         editTask(id);
       })
-      );
+    );
+  }
 
   taskDetailsButtonContainer.append(
       $(document.createElement("button")).attr({
         class:  'btn btn-danger',
         href:   '#',
-      }).text("Löschen")
-      .click(function(event) {
+      }).text(" Delete")
+      .prepend(
+        $(document.createElement("i")).attr({
+          class:  'icon-trash icon-white'
+        })
+      ).click(function(event) {
         delTask(id);
         removeTask();
         hideTaskDetails();

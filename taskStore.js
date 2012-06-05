@@ -15,7 +15,6 @@ function save(task, prio, date, tag, status) {
 }
 
 function delTask(id) {
-  debugger;
   var tasks = getStoreArray('tasklist');
   console.log(tasks);
   tasks.splice(id, 1);
