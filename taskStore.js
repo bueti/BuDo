@@ -26,7 +26,6 @@ function delTask(id) {
 
 function setStatus(id, state) {
   var myTasks = getStoreArray('tasklist');
-  debugger;
   myTasks[id].status = state;
   localStorage.setItem('tasklist', JSON.stringify(myTasks));
 }

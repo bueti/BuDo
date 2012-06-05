@@ -64,68 +64,51 @@ function showTasks() {
   }
 }
 
-function showKey(container, name, value) {
-  container.append(
-          //    $(document.createElement("fieldset")).append(
-          //$(document.createElement("div")).attr({
-          //  class:  'control-group'
-          //}).append(
-            $(document.createElement("label")).attr({
-              class:  'control-label'
-            }).text(name).add(
-              $(document.createElement("div")).attr({
-                class:  'controls'
-              })
-              .append(
-                $(document.createElement("span")).attr({
-                  class:  'input-xlarge uneditable-input'
-                }).text(value)
-                )
-              ))
-          //))
+function showKey(name, value) {
+  $("#tasklistdetailed").append(
+      $(document.createElement("dt")).text(name))
+  $("#tasklistdetailed").append(
+      $(document.createElement("dd")).text(value))
 }
 
 function showTaskDetails(id) {
-  var taskDetailsContainer = $('#taskdetails');
+  jQuery('<div/>', {
+    id:     'taskdetailslist',
+    class:  'row-fluid'
+  }).appendTo('#taskdetails2');
+
+  var taskDetailsContainer = $('#taskdetailslist');
   var taskdetail = getStoreArray('tasklist');
-
-  $("#taskdetails").append('<div id="taskdetails2">');
-
   
-  $("#taskdetails2").append('<form class="form-horizontal" id="form-details">');
-  $("#taskdetails2").append('<fieldset>');
-  $("#taskdetails2").append('<div class="control-group">');
-  //    $(document.createElement("form")).attr({
-  //      class:  'form-horizontal'
-  //    })
-  //  );
+  taskDetailsContainer.append(
+      $(document.createElement("dl")).attr({
+        class:  "dl-horizontal",
+        id:     "tasklistdetailed"
+      })
+  );
 
-  var taskDetailsContainer2 = $('form#form-details');
-
-  // Task Name Anzeigen
-  //showKey(taskDetailsContainer2, 'Name:', task);
   // Ausgabe der Taskdetails
-  //for (var index in taskdetail) {
-    $.each(taskdetail[id], function(key, value) {
-      if (key == 'task') {
-        showKey(taskDetailsContainer2, 'Task:', value);
-      } else if(key == 'prio') {
-        showKey(taskDetailsContainer2, 'Priorität:', value);
-      } else if (key == 'date') {
-        showKey(taskDetailsContainer2, 'Datum:', value);
-      } else if (key == 'tag') {
-        showKey(taskDetailsContainer2, '#Tag:', value);
-      }
-    });
-  //}
+  $.each(taskdetail[id], function(key, value) {
+    if (key == 'task') {
+      showKey('Task:', value);
+    } else if(key == 'prio') {
+      showKey('Priorität:', value);
+    } else if (key == 'date') {
+      showKey('Datum:', value);
+    } else if (key == 'tag') {
+      showKey('#Tag:', value);
+    }
+  });
 
-  taskDetailsContainer2.append(
-      $(document.createElement("p"))
-      );
+  jQuery('<div/>', {
+    id: 'taskdetailsbutton',
+  }).appendTo('#taskdetails2');
+
+  var taskDetailsButtonContainer = $('#taskdetailsbutton');
   
   // Erledigt Button nur anzeigen falls der Task noch nicht erledigt ist
   if(taskdetail[id].status == false) {
-  taskDetailsContainer2.append(
+  taskDetailsButtonContainer.append(
       $(document.createElement("button")).attr({
         class:  'btn btn-success',
         href:   '#',
@@ -139,7 +122,7 @@ function showTaskDetails(id) {
       );
   }
 
-  taskDetailsContainer2.append(
+  taskDetailsButtonContainer.append(
       $(document.createElement("button")).attr({
         class:  'btn',
         href:   '#',
@@ -149,7 +132,7 @@ function showTaskDetails(id) {
       })
       );
 
-  taskDetailsContainer2.append(
+  taskDetailsButtonContainer.append(
       $(document.createElement("button")).attr({
         class:  'btn btn-danger',
         href:   '#',
@@ -161,14 +144,11 @@ function showTaskDetails(id) {
       })
       );
 
-  taskDetailsContainer2.append('</div>');
-  taskDetailsContainer2.append('</fieldset>');
-  taskDetailsContainer2.append('</form>');
-  taskDetailsContainer2.append('</div>');
 }
 
 function hideTaskDetails() {
-  $("div#taskdetails2").remove();
+  $("div#taskdetailslist").remove();
+  $("div#taskdetailsbutton").remove();
 }
 
 function removeTask() {
