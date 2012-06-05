@@ -90,13 +90,13 @@ function showTaskDetails(id) {
   // Ausgabe der Taskdetails
   $.each(taskdetail[id], function(key, value) {
     if (key == 'task') {
-      showKey(' Task:', value);
+      showKey('Task:', value);
     } else if(key == 'prio') {
-      showKey(' Priorität:', value);
-    } else if (key == 'date') {
-      showKey(' Datum:', value);
-    } else if (key == 'tag') {
-      showKey(' #Tag:', value);
+      showKey('Priorität:', value);
+    } else if (key == 'date' && value != "") {
+      showKey('Datum:', value);
+    } else if (key == 'tag' && value != "") {
+      showKey('#Tag:', value);
     }
   });
 
@@ -105,7 +105,7 @@ function showTaskDetails(id) {
   }).appendTo('#taskdetails2');
 
   var taskDetailsButtonContainer = $('#taskdetailsbutton');
-  
+
   // Erledigt Button nur anzeigen falls der Task noch nicht erledigt ist
   if(taskdetail[id].status == false) {
     taskDetailsButtonContainer.append(
@@ -116,8 +116,9 @@ function showTaskDetails(id) {
       }).text(" Done")
       .click(function(event) {
         setStatus(id, true);
-        hideTaskDetails(id);
-        showTaskDetails(id);
+        //refreshTasklist();
+        removeTasks();
+        refreshTaskdetails(id);
       })
     );
 
@@ -130,12 +131,12 @@ function showTaskDetails(id) {
       $(document.createElement("button")).attr({
         class:  'btn btn-inverse',
         id:     'done',
+        href:   '#',
       }).text(" Reopen")
       .click(function(event) {
         setStatus(id, false);
-        hideTaskDetails(id);
-        removeTask(id);
-        showTaskDetails(id);
+        removeTasks();
+        refreshTaskdetails(id);
       })
     );
 
@@ -161,21 +162,20 @@ function showTaskDetails(id) {
   }
 
   taskDetailsButtonContainer.append(
-      $(document.createElement("button")).attr({
-        class:  'btn btn-danger',
-        href:   '#',
-      }).text(" Delete")
-      .prepend(
-        $(document.createElement("i")).attr({
-          class:  'icon-trash icon-white'
-        })
-      ).click(function(event) {
-        delTask(id);
-        removeTask();
-        hideTaskDetails();
+    $(document.createElement("button")).attr({
+      class:  'btn btn-danger',
+      href:   '#',
+    }).text(" Delete")
+    .prepend(
+      $(document.createElement("i")).attr({
+        class:  'icon-trash icon-white'
       })
-      );
-
+    ).click(function(event) {
+      delTask(id);
+      removeTasks();
+      hideTaskDetails();
+    })
+  );
 }
 
 function hideTaskDetails() {
@@ -183,7 +183,21 @@ function hideTaskDetails() {
   $("div#taskdetailsbutton").remove();
 }
 
-function removeTask() {
+function removeTasks() {
   $("div#removeme").remove();
   showTasks();
+}
+
+function refreshTasklist() {
+  removeTasks();
+  showTasks();
+}
+
+function refreshTaskdetails(id) {
+  hideTaskDetails(id);
+  showTaskDetails(id);
+}
+
+function editTask(id) {
+  alert("Sorry, this is a premium version feature!");
 }
