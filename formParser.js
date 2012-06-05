@@ -11,7 +11,6 @@ $(function() {
 
     if (taskname) {
       save(taskname, prio, date, tag, status)
-      showTasks();
     }
   });  
 });  
