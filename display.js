@@ -4,31 +4,32 @@ function showTasks() {
   var myTasks = getStoreArray('tasklist');
   var visible = false;
 
+  // Show sort radio buttons only in big lists
+  if(myTasks.length < 4) {
+    $('div#sort').addClass("hidden");
+  } else {
+    $('div#sort').removeClass("hidden");
+  }
+
+  // Add a div for every tasks, so it's easy to remove it afterwards
   for (var id in myTasks) {
     taskContainer.append(
-      $(document.createElement("div")).attr({
-        id:   'removeme'
+      $(document.createElement("button")).attr({
+        type:   'text',
+        class:  'btn btn-task',
+        id:     id,
+      }).text(myTasks[id].task)
+      .click(function() {
+        taskButtonId = this.id;
+        // Details Anzeigen / Verstecken
+        if(!visible) {
+          refreshTaskdetails(taskButtonId);
+          visible = true;
+        } else {
+          refreshTaskdetails(taskButtonId);
+          visible = false;
+        }
       })
-      .append(
-        $(document.createElement("button")).attr({
-          type:   'text',
-          class:  'btn btn-task',
-          id:     id,
-        }).text(myTasks[id].task)
-        .click(function() {
-          taskButtonId = this.id;
-          // Details Anzeigen / Verstecken
-          hideTaskDetails();
-          //var c = this.checked ? showTaskDetails(task) : hideTaskDetails(task);
-          if(!visible) {
-            showTaskDetails(taskButtonId);
-            visible = true;
-          } else {
-            showTaskDetails(taskButtonId);
-            visible = false;
-          }
-        })
-      )
     );
 
     if (myTasks[id].status) {
@@ -41,11 +42,9 @@ function showTasks() {
       $("#" + id).addClass('task-plow');
     }
   }
-
-  sortByName();
 }
 
-function showKey(name, value) {
+function showDetail(name, value) {
   $("#tasklistdetailed").append(
       $(document.createElement("dt")).text(name))
   $("#tasklistdetailed").append(
@@ -71,13 +70,13 @@ function showTaskDetails(id) {
   // Ausgabe der Taskdetails
   $.each(taskdetail[id], function(key, value) {
     if (key == 'task') {
-      showKey('Task:', value);
+      showDetail('Task:', value);
     } else if(key == 'prio') {
-      showKey('Priorität:', value);
+      showDetail('Priorität:', value);
     } else if (key == 'date' && value != "") {
-      showKey('Datum:', value);
+      showDetail('Datum:', value);
     } else if (key == 'tag' && value != "") {
-      showKey('#Tag:', value);
+      showDetail('#Tag:', value);
     }
   });
 
@@ -97,8 +96,7 @@ function showTaskDetails(id) {
       }).text(" Done")
       .click(function(event) {
         setStatus(id, true);
-        //refreshTasklist();
-        removeTasks();
+        $('button#' + id).addClass('task-done');
         refreshTaskdetails(id);
       })
     );
@@ -116,7 +114,7 @@ function showTaskDetails(id) {
       }).text(" Reopen")
       .click(function(event) {
         setStatus(id, false);
-        removeTasks();
+        $('button#' + id).removeClass('task-done');
         refreshTaskdetails(id);
       })
     );
@@ -153,7 +151,7 @@ function showTaskDetails(id) {
       })
     ).click(function(event) {
       delTask(id);
-      removeTasks();
+      removeTask(id);
       hideTaskDetails();
     })
   );

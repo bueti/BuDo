@@ -1,3 +1,25 @@
+function hideTaskDetails() {
+  $("div#taskdetailslist").remove();
+  $("div#taskdetailsbutton").remove();
+}
+
+function removeTask(id) {
+  $("button#" + id).remove();
+}
+
+function refreshTaskdetails(id) {
+  hideTaskDetails(id);
+  showTaskDetails(id);
+}
+
+function editTask(id) {
+  alert("Sorry, this is a premium version feature!");
+}
+
+/*
+ * Sortierungen
+ * TODO funktionieren noch überhaupt nicht :(
+ */
 function sortByField() {
   var parentContainer = $('div#todos');
   var sortByContainer = $(document.createElement("div")).attr({
@@ -25,7 +47,6 @@ function sortByField() {
   parentContainer.append(sortByContainer);
 }
 
-
 function sortByName() {
   var mylist = $('#tasklist');
   var listitems = mylist.children('button').get();
@@ -33,28 +54,4 @@ function sortByName() {
        return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
   })
   $.each(listitems, function(idx, itm) { mylist.append(itm); });
-}
-
-function hideTaskDetails() {
-  $("div#taskdetailslist").remove();
-  $("div#taskdetailsbutton").remove();
-}
-
-function removeTasks() {
-  $("div#removeme").remove();
-  showTasks();
-}
-
-function refreshTasklist() {
-  removeTasks();
-  showTasks();
-}
-
-function refreshTaskdetails(id) {
-  hideTaskDetails(id);
-  showTaskDetails(id);
-}
-
-function editTask(id) {
-  alert("Sorry, this is a premium version feature!");
 }
