@@ -16,7 +16,35 @@ $(function() {
 });  
 
 function init() {
+  //sortByField();
   showTasks();
+}
+
+function sortByField() {
+  var parentContainer = $('div#todos');
+  var sortByContainer = $(document.createElement("div")).attr({
+    id:     'sortBy',
+    class:  'controls'
+  });
+  var prioRadio = $(document.createElement("label")).attr({
+      class:  'radio inline',
+    }).append(
+    $(document.createElement("input")).attr({
+      type:   'radio',
+      id:     'prioRadio',
+    })
+  );
+  var nameRadio = $(document.createElement("label")).attr({
+      class:  'radio inline',
+    }).append(
+    $(document.createElement("input")).attr({
+      type:   'radio',
+      id:     'nameRadio',
+    })
+  );
+  
+  sortByContainer.append(prioRadio.append(nameRadio));
+  parentContainer.append(sortByContainer);
 }
 
 function showTasks() {
@@ -61,6 +89,8 @@ function showTasks() {
       $("#" + id).addClass('task-plow');
     }
   }
+
+  sortByName();
 }
 
 function showKey(name, value) {
@@ -175,6 +205,16 @@ function showTaskDetails(id) {
       hideTaskDetails();
     })
   );
+
+}
+
+function sortByName() {
+  var mylist = $('#tasklist');
+  var listitems = mylist.children('button').get();
+  listitems.sort(function(a, b) {
+       return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
+  })
+  $.each(listitems, function(idx, itm) { mylist.append(itm); });
 }
 
 function hideTaskDetails() {
