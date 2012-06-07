@@ -16,8 +16,12 @@ function save(task, prio, date, tag, status) {
 
 function delTask(id) {
   var tasks = getStoreArray('tasklist');
-  tasks.splice(id, 1);
-  //delete tasks[id];
+  for (var i=0; i<tasks.length; i++) {
+    if(tasks[i].id == id) {
+      tasks.splice(i, 1);
+      break;
+    }
+  }
   localStorage.setItem('tasklist', JSON.stringify(tasks));
 }
 
