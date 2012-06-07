@@ -1,7 +1,7 @@
 
 function save(task, prio, date, tag, status) {
   tasks = getStoreArray('tasklist');
-  var id = tasks.length;
+  var id = Math.floor( Math.random()*999 );
   var myTask = {
     id      : id,
     task    : task,
@@ -17,12 +17,19 @@ function save(task, prio, date, tag, status) {
 function delTask(id) {
   var tasks = getStoreArray('tasklist');
   tasks.splice(id, 1);
+  //delete tasks[id];
   localStorage.setItem('tasklist', JSON.stringify(tasks));
 }
 
 function setStatus(id, state) {
+  debugger;
   var myTasks = getStoreArray('tasklist');
-  myTasks[id].status = state;
+  for (var i=0; i<myTasks.length; i++) {
+    if(myTasks[i].id == id) {
+      myTasks[i].status = state;
+      break;
+    }
+  }
   localStorage.setItem('tasklist', JSON.stringify(myTasks));
 }
 

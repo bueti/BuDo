@@ -1,4 +1,3 @@
-
 function showTasks() {
   var taskContainer = $('div#tasklist.controls');
   var myTasks = getStoreArray('tasklist');
@@ -17,7 +16,7 @@ function showTasks() {
       $(document.createElement("button")).attr({
         type:   'text',
         class:  'btn btn-task',
-        id:     id,
+        id:     myTasks[id].id,
       }).text(myTasks[id].task)
       .click(function() {
         taskButtonId = this.id;
@@ -52,13 +51,13 @@ function showDetail(name, value) {
 }
 
 function showTaskDetails(id) {
+  var taskdetail = getStoreArray('tasklist');
   jQuery('<div/>', {
     id:     'taskdetailslist',
     class:  'row-fluid'
   }).appendTo('#taskdetails2');
 
   var taskDetailsContainer = $('#taskdetailslist');
-  var taskdetail = getStoreArray('tasklist');
   
   taskDetailsContainer.append(
       $(document.createElement("dl")).attr({
@@ -68,17 +67,14 @@ function showTaskDetails(id) {
   );
 
   // Ausgabe der Taskdetails
-  $.each(taskdetail[id], function(key, value) {
-    if (key == 'task') {
-      showDetail('Task:', value);
-    } else if(key == 'prio') {
-      showDetail('Priorität:', value);
-    } else if (key == 'date' && value != "") {
-      showDetail('Datum:', value);
-    } else if (key == 'tag' && value != "") {
-      showDetail('#Tag:', value);
-    }
-  });
+  for (var i=0; i<taskdetail.length; i++) {
+      if(taskdetail[i].id == id) {
+        showDetail('Task:', taskdetail[i].task);
+        showDetail('Priorität:', taskdetail[i].prio);
+        showDetail('Datum:', taskdetail[i].date);
+        showDetail('#Tag:', taskdetail[i].tag);
+      }
+  }
 
   jQuery('<div/>', {
     id: 'taskdetailsbutton',
@@ -87,73 +83,72 @@ function showTaskDetails(id) {
   var taskDetailsButtonContainer = $('#taskdetailsbutton');
 
   // Erledigt Button nur anzeigen falls der Task noch nicht erledigt ist
-  if(taskdetail[id].status == false) {
-    taskDetailsButtonContainer.append(
-      $(document.createElement("button")).attr({
-        class:  'btn btn-success',
-        id:     'done',
-        href:   '#',
-      }).text(" Done")
-      .click(function(event) {
-        setStatus(id, true);
-        $('button#' + id).addClass('task-done');
-        refreshTaskdetails(id);
-      })
-    );
+  for (var i=0; i<taskdetail.length; i++) {
+    if(taskdetail[i].id == id) {
+      if(taskdetail[i].status == false) {
+        taskDetailsButtonContainer.append(
+            $(document.createElement("button")).attr({
+              class:  'btn btn-success',
+              id:     'done',
+            }).text(" Done")
+            .click(function(event) {
+              setStatus(id, true);
+              $('button#' + id).addClass('task-done');
+              refreshTaskdetails(id);
+            })
+            );
 
-    jQuery('<i/>', {
-      class:  'icon-check icon-white',
-    }).prependTo('#done');
+        jQuery('<i/>', {
+          class:  'icon-check icon-white',
+        }).prependTo('#done');
 
-  } else {
-    taskDetailsButtonContainer.append(
-      $(document.createElement("button")).attr({
-        class:  'btn btn-inverse',
-        id:     'done',
-        href:   '#',
-      }).text(" Reopen")
-      .click(function(event) {
-        setStatus(id, false);
-        $('button#' + id).removeClass('task-done');
-        refreshTaskdetails(id);
-      })
-    );
+      } else {
+        taskDetailsButtonContainer.append(
+            $(document.createElement("button")).attr({
+              class:  'btn btn-inverse',
+              id:     'done',
+            }).text(" Reopen")
+            .click(function(event) {
+              setStatus(id, false);
+              $('button#' + id).removeClass('task-done');
+              refreshTaskdetails(id);
+            })
+            );
 
-    jQuery('<i/>', {
-      class:  'icon-check icon-white',
-    }).prependTo('#done'); 
+        jQuery('<i/>', {
+          class:  'icon-check icon-white',
+        }).prependTo('#done'); 
+      }
+
+      if(taskdetail[i].status == false) {
+        taskDetailsButtonContainer.append(
+            $(document.createElement("button")).attr({
+              class:  'btn',
+            }).text(" Edit")
+            .prepend(
+              $(document.createElement("i")).attr({
+                class:  'icon-edit'
+              })
+              ).click(function(event) {
+                editTask(id);
+              })
+            );
+      }
+
+      taskDetailsButtonContainer.append(
+          $(document.createElement("button")).attr({
+            class:  'btn btn-danger',
+          }).text(" Delete")
+          .prepend(
+            $(document.createElement("i")).attr({
+              class:  'icon-trash icon-white'
+            })
+            ).click(function(event) {
+              delTask(id);
+              removeTask(id);
+              hideTaskDetails();
+            })
+          );
+    }
   }
-
-  if(taskdetail[id].status == false) {
-    taskDetailsButtonContainer.append(
-      $(document.createElement("button")).attr({
-        class:  'btn',
-        href:   '#',
-      }).text(" Edit")
-      .prepend(
-        $(document.createElement("i")).attr({
-          class:  'icon-edit'
-        })
-      ).click(function(event) {
-        editTask(id);
-      })
-    );
-  }
-
-  taskDetailsButtonContainer.append(
-    $(document.createElement("button")).attr({
-      class:  'btn btn-danger',
-      href:   '#',
-    }).text(" Delete")
-    .prepend(
-      $(document.createElement("i")).attr({
-        class:  'icon-trash icon-white'
-      })
-    ).click(function(event) {
-      delTask(id);
-      removeTask(id);
-      hideTaskDetails();
-    })
-  );
-
 }
