@@ -30,15 +30,14 @@ function showTasks() {
         }
       })
     );
-
     if (myTasks[id].status) {
-      $("#" + id).addClass('task-done');
+      $("#" + myTasks[id].id).addClass('task-done');
     }
     if (myTasks[id].prio == 'Hoch') {
-      $("#" + id).addClass('task-phigh');
+      $("#" + myTasks[id].id).addClass('task-phigh');
     } 
     if (myTasks[id].prio == 'Niedrig') {
-      $("#" + id).addClass('task-plow');
+      $("#" + myTasks[id].id).addClass('task-plow');
     }
   }
 }
