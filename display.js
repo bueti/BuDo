@@ -1,4 +1,4 @@
-function showTasks() {
+function showTasks(sort) {
   var taskContainer = $('div#tasklist.controls');
   var myTasks = getStoreArray('tasklist');
   var visible = false;
@@ -8,6 +8,12 @@ function showTasks() {
     $('div#sort').addClass("hidden");
   } else {
     $('div#sort').removeClass("hidden");
+  }
+
+  if (sort != null) {
+    myTasks = sortTasks(sort, myTasks);
+  } else {
+    myTasks = sortTasks('name', myTasks);
   }
 
   // Add a div for every tasks, so it's easy to remove it afterwards

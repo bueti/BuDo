@@ -26,7 +26,6 @@ function delTask(id) {
 }
 
 function setStatus(id, state) {
-  debugger;
   var myTasks = getStoreArray('tasklist');
   for (var i=0; i<myTasks.length; i++) {
     if(myTasks[i].id == id) {

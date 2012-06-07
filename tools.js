@@ -16,42 +16,48 @@ function editTask(id) {
   alert("Sorry, this is a premium version feature!");
 }
 
-/*
- * Sortierungen
- * TODO funktionieren noch überhaupt nicht :(
- */
-function sortByField() {
-  var parentContainer = $('div#todos');
-  var sortByContainer = $(document.createElement("div")).attr({
-    id:     'sortBy',
-    class:  'controls'
-  });
-  var prioRadio = $(document.createElement("label")).attr({
-      class:  'radio inline',
-    }).append(
-    $(document.createElement("input")).attr({
-      type:   'radio',
-      id:     'prioRadio',
-    })
-  );
-  var nameRadio = $(document.createElement("label")).attr({
-      class:  'radio inline',
-    }).append(
-    $(document.createElement("input")).attr({
-      type:   'radio',
-      id:     'nameRadio',
-    })
-  );
-  
-  sortByContainer.append(prioRadio.append(nameRadio));
-  parentContainer.append(sortByContainer);
+function removeTasklist() {
+  var myTasks = getStoreArray('tasklist');
+  // remove tasks
+  for (var i in myTasks) {
+    $("button#" + myTasks[i].id).remove();
+  }
 }
 
-function sortByName() {
-  var mylist = $('#tasklist');
-  var listitems = mylist.children('button').get();
-  listitems.sort(function(a, b) {
-       return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
-  })
-  $.each(listitems, function(idx, itm) { mylist.append(itm); });
+/*
+ * Sortierungen
+ */
+function sortTasks(sort, myTasks) {
+  // Default sortByName
+  if (sort == 'name') { myTasks.sort(sortByName); };
+  if (sort == 'tag')  { myTasks.sort(sortByTag);  };
+  if (sort == 'date') { myTasks.sort(sortByDate); };
+  if (sort == 'prio') { myTasks.sort(sortByPrio); };
+
+  return myTasks;
 }
+
+function sortByName(a, b) {
+    var aName = a.task.toLowerCase();
+    var bName = b.task.toLowerCase(); 
+    return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+}
+
+function sortByTag(a, b){
+    var aName = a.tag.toLowerCase();
+    var bName = b.tag.toLowerCase(); 
+    return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+}
+
+function sortByDate(a, b) {
+    var aName = a.date.toLowerCase();
+    var bName = b.date.toLowerCase(); 
+    return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+}
+
+function sortByPrio(a, b) {
+    var aName = a.prio.toLowerCase();
+    var bName = b.prio.toLowerCase(); 
+    return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+}
+
