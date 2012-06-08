@@ -39,10 +39,10 @@ function showTasks(sort) {
     if (myTasks[id].status) {
       $("#" + myTasks[id].id).addClass('task-done');
     }
-    if (myTasks[id].prio == 'Hoch') {
+    if (myTasks[id].prio == '0') {
       $("#" + myTasks[id].id).addClass('task-phigh');
     } 
-    if (myTasks[id].prio == 'Niedrig') {
+    if (myTasks[id].prio == '2') {
       $("#" + myTasks[id].id).addClass('task-plow');
     }
   }
@@ -73,12 +73,15 @@ function showTaskDetails(id) {
 
   // Ausgabe der Taskdetails
   for (var i=0; i<taskdetail.length; i++) {
-      if(taskdetail[i].id == id) {
-        showDetail('Task:', taskdetail[i].task);
-        showDetail('Priorität:', taskdetail[i].prio);
-        showDetail('Datum:', taskdetail[i].date);
-        showDetail('#Tag:', taskdetail[i].tag);
-      }
+    if(taskdetail[i].id == id) {
+      showDetail('Task:', taskdetail[i].task);
+      if(taskdetail[i].prio == 0) var prio = 'Hoch';
+      if(taskdetail[i].prio == 1) var prio = 'Normal';
+      if(taskdetail[i].prio == 2) var prio = 'Niedrig';
+      showDetail('Priorität:', prio);
+      showDetail('Datum:', taskdetail[i].date);
+      showDetail('#Tag:', taskdetail[i].tag);
+    }
   }
 
   jQuery('<div/>', {
@@ -107,6 +110,19 @@ function showTaskDetails(id) {
           class:  'icon-check icon-white',
         }).prependTo('#done');
 
+        taskDetailsButtonContainer.append(
+            $(document.createElement("button")).attr({
+              class:  'btn',
+            }).text(" Edit")
+            .prepend(
+              $(document.createElement("i")).attr({
+                class:  'icon-edit'
+              })
+              ).click(function(event) {
+                editTask(id);
+              })
+            );
+
       } else {
         taskDetailsButtonContainer.append(
             $(document.createElement("button")).attr({
@@ -123,21 +139,6 @@ function showTaskDetails(id) {
         jQuery('<i/>', {
           class:  'icon-check icon-white',
         }).prependTo('#done'); 
-      }
-
-      if(taskdetail[i].status == false) {
-        taskDetailsButtonContainer.append(
-            $(document.createElement("button")).attr({
-              class:  'btn',
-            }).text(" Edit")
-            .prepend(
-              $(document.createElement("i")).attr({
-                class:  'icon-edit'
-              })
-              ).click(function(event) {
-                editTask(id);
-              })
-            );
       }
 
       taskDetailsButtonContainer.append(

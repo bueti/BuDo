@@ -1,7 +1,11 @@
 
 function save(task, prio, date, tag, status) {
   tasks = getStoreArray('tasklist');
-  var id = Math.floor( Math.random()*999 );
+  var id = Math.floor( Math.random()*9999 );
+  if (prio == 'Hoch' ) prio = '0';
+  if (prio == 'Normal' ) prio = '1';
+  if (prio == 'Niedrig' ) prio = '2';
+
   var myTask = {
     id      : id,
     task    : task,
