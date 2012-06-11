@@ -153,6 +153,10 @@ function showTaskDetails(id) {
               delTask(id);
               removeTask(id);
               hideTaskDetails();
+              debugger;
+              if(getStoreArray('tasklist').length < 3) {
+                $('div#sort').addClass("hidden");
+              }
             })
           );
     }
