@@ -4,7 +4,7 @@ function showTasks(sort) {
   var visible = false;
 
   // Show sort radio buttons only in big lists
-  if(myTasks.length < 4) {
+  if(myTasks.length < 3) {
     $('div#sort').addClass("hidden");
   } else {
     $('div#sort').removeClass("hidden");
