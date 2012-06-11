@@ -65,10 +65,10 @@ function showTaskDetails(id) {
   var taskDetailsContainer = $('#taskdetailslist');
   
   taskDetailsContainer.append(
-      $(document.createElement("dl")).attr({
-        class:  "dl-horizontal",
-        id:     "tasklistdetailed"
-      })
+    $(document.createElement("dl")).attr({
+      class:  "dl-horizontal",
+      id:     "tasklistdetailed"
+    })
   );
 
   // Ausgabe der Taskdetails
