@@ -1,5 +1,5 @@
 $(function() {  
-  $(".btn").click(function() {  
+  $("#saveBtn").click(function() {  
     // validate and process form here  
     //
 
@@ -38,6 +38,9 @@ function init() {
   $("input[id=namePrio]").click(function() {
     removeTasklist();
     showTasks('name');
+  });
+  $("button[id=removeAllTasks]").click(function() {
+    removeAllCompletedTasks();
   });
 }
 

@@ -1,3 +1,5 @@
+var countDone = 0;
+
 function showTasks(sort) {
   var taskContainer = $('div#tasklist.controls');
   var myTasks = getStoreArray('tasklist');
@@ -10,13 +12,15 @@ function showTasks(sort) {
     $('div#sort').removeClass("hidden");
   }
 
+  // Sort
   if (sort != null) {
     myTasks = sortTasks(sort, myTasks);
   } else {
     myTasks = sortTasks('name', myTasks);
   }
 
-  // Add a div for every tasks, so it's easy to remove it afterwards
+
+  // List all Tasks
   for (var id in myTasks) {
     taskContainer.append(
       $(document.createElement("button")).attr({
@@ -38,6 +42,7 @@ function showTasks(sort) {
     );
     if (myTasks[id].status) {
       $("#" + myTasks[id].id).addClass('task-done');
+      countDone++;
     }
     if (myTasks[id].prio == '0') {
       $("#" + myTasks[id].id).addClass('task-phigh');
@@ -46,6 +51,19 @@ function showTasks(sort) {
       $("#" + myTasks[id].id).addClass('task-plow');
     }
   }
+
+  // Display remove all button if there are tasks with status done
+  if(countDone > 0) {
+    showRemoveAllButton();
+  }
+}
+
+function showRemoveAllButton() {
+    $('#removeAllTasks').removeClass("hidden");
+}
+
+function delRemoveAllButton() {
+    $('#removeAllTasks').addClass("hidden");
 }
 
 function showDetail(name, value) {
@@ -103,6 +121,8 @@ function showTaskDetails(id) {
               setStatus(id, true);
               $('button#' + id).addClass('task-done');
               refreshTaskdetails(id);
+              showRemoveAllButton();
+              countDone++;
             })
             );
 
@@ -133,6 +153,10 @@ function showTaskDetails(id) {
               setStatus(id, false);
               $('button#' + id).removeClass('task-done');
               refreshTaskdetails(id);
+              countDone--;
+              if(countDone > 0) {
+                delRemoveAllButton();
+              }
             })
             );
 
@@ -153,7 +177,6 @@ function showTaskDetails(id) {
               delTask(id);
               removeTask(id);
               hideTaskDetails();
-              debugger;
               if(getStoreArray('tasklist').length < 3) {
                 $('div#sort').addClass("hidden");
               }

@@ -24,6 +24,20 @@ function removeTasklist() {
   }
 }
 
+function removeAllCompletedTasks() {
+  var myTasks = getStoreArray('tasklist');
+  // remove tasks
+  for (var i = 0; i<myTasks.length; i++) {
+    if(myTasks[i].status) {
+      removeTask(myTasks[i].id);
+      delTask(myTasks[i].id);
+      refreshTaskdetails(myTasks[i].id);
+    }
+  }
+  // Remove remove button ;)
+  delRemoveAllButton();
+}
+
 /*
  * Sortierungen
  */
